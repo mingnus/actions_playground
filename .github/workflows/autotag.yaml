@@ -18,5 +18,5 @@ jobs:
       with:
         strategy: regex
         root: "./thin-provisioning-tools/Cargo.toml"
-        regex_pattern: "version=([0-9]\\.)"
+        regex_pattern: "version = ([0-9]\\.)"
         tag_prefix: "v"
