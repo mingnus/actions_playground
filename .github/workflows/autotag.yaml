@@ -10,13 +10,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-      with:
-        path: thin-provisioning-tools
+      #with:
+      #  path: actions_playground
     - uses: butlerlogic/action-autotag@1.1.2
       env:
         GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+        ACTION_STEP_DEBUG: true
       with:
         strategy: regex
-        root: "./thin-provisioning-tools/Cargo.toml"
-        regex_pattern: "version = ([0-9]\\.)"
+        root: "Cargo.toml"
+        regex_pattern: 'version = "([0-9]\\.)"'
         tag_prefix: "v"
