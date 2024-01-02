@@ -1,0 +1,32 @@
+name: Tag new version
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  version-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: git fetch --all --tags
+      - name: Check release version
+        id: version_check
+        uses: thebongy/version-check@v2
+        with:
+          file: Cargo.toml
+          tagFormat: v${version}
+      - name: Print version check results
+        run: |
+          echo "rawVersion ${{ steps.version_check.outputs.rawVersion }}"
+          echo "releaseVersion ${{ steps.version_check.outputs.releaseVersion }}"
+          echo "versionChanged ${{ steps.version_check.outputs.versionChanged }}"
+          echo "releaseTags ${{ steps.version_check.outputs.releaseTags }}"
+      - name: Tag new version
+        if: steps.version_check.outputs.versionChanged == 'true'
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          custom_tag: "${{ steps.version_check.outputs.rawVersion }}"
